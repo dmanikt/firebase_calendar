@@ -9,7 +9,6 @@ public class User {
     public String email;
     public String id;
     public ArrayList<String> friends;
-
     public User() {}
 
     public User(String id, String email) {
