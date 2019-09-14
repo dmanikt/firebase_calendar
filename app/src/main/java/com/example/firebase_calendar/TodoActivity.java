@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.firebase_calendar.db.TaskContract;
 import com.example.firebase_calendar.db.TaskDbHelper;
 import java.util.ArrayList;
@@ -43,27 +46,38 @@ public class TodoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_add_task: {
-                final EditText taskEditText = new EditText(this);
-                final EditText timeEditText = new EditText(this);
-                AlertDialog dialog = new AlertDialog.Builder(this)
-                        .setTitle("Add a new task")
-                        .setMessage("What do you want to do next?")
-                        .setView(taskEditText)
-                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String task = String.valueOf(taskEditText.getText());
-                                SQLiteDatabase db = mHelper.getWritableDatabase();
-                                ContentValues values = new ContentValues();
-                                values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
-                                db.insertWithOnConflict(TaskContract.TaskEntry.TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-                                db.close();
-                                updateUI();
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .create();
-                dialog.show();
+//                final EditText taskEditText = new EditText(this);
+//                final EditText timeEditText = new EditText(this);
+//                AlertDialog dialog = new AlertDialog.Builder(TodoActivity.this)
+//                        .setTitle("Add a new task")
+//                        .setMessage("What do you want to do next?")
+//                        .setView(taskEditText)
+//                        .setPositiveButton("Next", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                String task = String.valueOf(taskEditText.getText());
+//                                SQLiteDatabase db = mHelper.getWritableDatabase();
+//                                ContentValues values = new ContentValues();
+//                                final AlertDialog alert;
+//                                AlertDialog.Builder dialog2 = new AlertDialog.Builder(TodoActivity.this);
+//                                alert = dialog2.create();
+//                                alert.setTitle("How long will it take?");
+//                                alert.setButton("Yes", new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        // TODO Auto-generated method stub
+//                                        Toast.makeText(CategoryPage.this, "YESS", Toast.LENGTH_LONG).show();
+//                                    }
+//                                });
+//                                values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
+//                                db.insertWithOnConflict(TaskContract.TaskEntry.TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+//                                db.close();
+//                                updateUI();
+//                            }
+//                        })
+//                        .setNegativeButton("Cancel", null)
+//                        .create();
+//                dialog.show();
+                openDialog();
                 return true;
             }
             default:
@@ -104,6 +118,11 @@ public class TodoActivity extends AppCompatActivity {
 
         cursor.close();
         db.close();
+    }
+
+    public void openDialog(){
+        ExampleDialog exampleDialog = new ExampleDialog();
+        exampleDialog.show(getSupportFragmentManager(), "example dialog");
     }
 
 
