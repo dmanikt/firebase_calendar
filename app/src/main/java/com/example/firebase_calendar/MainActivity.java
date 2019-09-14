@@ -1,12 +1,16 @@
 package com.example.firebase_calendar;
 
+import android.drm.DrmStore;
 import android.graphics.RectF;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.ListView;
@@ -31,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 //    MaterialCalendarView materialCalendarView;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle toggle;
     AwesomeCalendarView awesomeCalendarView;
     String[] timeArray = {"12:00am", "", "", "", "1:00am", "", "", "", "2:00am", "", "", "", "3:00am", "", "", "",
                         "4:00am", "", "", "", "5:00am", "", "", "", "6:00am", "", "", "", "7:00am", "", "", "",
@@ -47,11 +53,31 @@ public class MainActivity extends AppCompatActivity {
                             "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event",
                             "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event",};
     ListView listView;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(toggle.onOptionsItemSelected(item)){
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         awesomeCalendarView = (AwesomeCalendarView) findViewById(R.id.calendar_view);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         CalendarAdapter calendarAdapter = new CalendarAdapter(this, timeArray, eventArray);
         listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(calendarAdapter);
@@ -74,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onDateLongClicked: " + dateTime);
             }
         });
+
+
 //        WeekView mWeekView;
 //        WeekView.EventClickListener mEventClickListener;
 //        MonthLoader.MonthChangeListener mMonthChangeListener;

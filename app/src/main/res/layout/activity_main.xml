@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/drawer_layout">
+
+
 
 <!--    <com.prolificinteractive.materialcalendarview.MaterialCalendarView-->
 <!--        android:id="@+id/calendar_view"-->
@@ -33,25 +36,38 @@
         <!--app:dayBackgroundColor="#05000000"-->
         <!--app:todayBackgroundColor="#1848adff"-->
         <!--app:headerColumnBackground="#ffffffff"/>-->
-    <com.github.naz013.awcalendar.AwesomeCalendarView
-        android:id="@+id/calendar_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:ac_day_bg_color="@color/colorPrimary"
-        app:ac_day_border_color="#ffffff"
-        app:ac_day_current_text_color="#ff0000"
-        app:ac_day_text_color="#ffffff"
-        app:ac_day_unselected_text_color="#40ffffff"
-        app:ac_event_color="#acacac"
-        app:ac_highlight_out_of_bounds_days="true"
-        app:ac_show_weekday_mark="true"
-        app:ac_start_day_of_week="sunday"
-        app:ac_type="both"
-        app:ac_weekday_mark_text_color="#77ff55"/>
+        android:layout_height="match_parent">
+        <com.github.naz013.awcalendar.AwesomeCalendarView
+            android:id="@+id/calendar_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ac_day_bg_color="@color/colorPrimary"
+            app:ac_day_border_color="#ffffff"
+            app:ac_day_current_text_color="#ff0000"
+            app:ac_day_text_color="#ffffff"
+            app:ac_day_unselected_text_color="#40ffffff"
+            app:ac_event_color="#acacac"
+            app:ac_highlight_out_of_bounds_days="true"
+            app:ac_show_weekday_mark="true"
+            app:ac_start_day_of_week="sunday"
+            app:ac_type="both"
+            app:ac_weekday_mark_text_color="#77ff55"/>
 <!--        app:ac_weekday_titles="@array/weekday_titles" />-->
-    <ListView
-        android:layout_below="@+id/calendar_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/list_view"/>
-</RelativeLayout>
+        <ListView
+            android:layout_below="@+id/calendar_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_view"/>
+    </RelativeLayout>
+
+    <android.support.design.widget.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:menu="@menu/navigation_menu"
+        android:layout_gravity="start">
+
+    </android.support.design.widget.NavigationView>
+
+</android.support.v4.widget.DrawerLayout>
