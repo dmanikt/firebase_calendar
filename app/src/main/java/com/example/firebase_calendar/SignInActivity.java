@@ -49,15 +49,25 @@ public class SignInActivity extends AppCompatActivity {
         mSignInButton = findViewById(R.id.buttonSignIn);
         mSignUpButton = findViewById(R.id.buttonSignUp);
 
-        mSignInButton.setOnClickListener(this);
-        mSignUpButton.setOnClickListener(this);
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view == mSignInButton) signIn();
+            }
+        });
+        mSignUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view == mSignUpButton) signUp();
+            }
+        });
 
-        List<AuthUI.IdpConfig> providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build());
+        /*List<AuthUI.IdpConfig> providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build());
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers).build(),
-                123);
+                123);*/
     }
 
     public void onStart() {
@@ -75,7 +85,6 @@ public class SignInActivity extends AppCompatActivity {
             return;
         }
 
-        showProgressDialog();
         String email = mEmailField.getText().toString();
         String password = mPasswordField.getText().toString();
 
@@ -84,7 +93,6 @@ public class SignInActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signIn:onComplete:" + task.isSuccessful());
-                        hideProgressDialog();
 
                         if (task.isSuccessful()) {
                             onAuthSuccess(task.getResult().getUser());
@@ -166,14 +174,4 @@ public class SignInActivity extends AppCompatActivity {
         mDatabase.child("users").child(userId).setValue(user);
     }
     // [END basic_write]
-
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.buttonSignIn) {
-            signIn();
-        } else if (i == R.id.buttonSignUp) {
-            signUp();
-        }
-    }
 }
