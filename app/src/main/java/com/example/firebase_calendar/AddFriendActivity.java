@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -30,8 +31,14 @@ public class AddFriendActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (view == mButton) addFriend(mText.getText().toString());
+                display();
             }
         });
+    }
+
+    public void display() {
+        String task = mDatabase.child("users").orderByChild("id").equalTo(mText.getText().toString()).getRef().child("events").toString();
+        Toast.makeText(this, task, Toast.LENGTH_SHORT).show();
     }
 
     public void addFriend(String name) {

@@ -136,7 +136,7 @@ public class SignInActivity extends AppCompatActivity {
         writeNewUser(user.getUid(), username, user.getEmail());
 
         // Go to MainActivity
-        startActivity(new Intent(SignInActivity.this, AddFriendActivity.class));
+        startActivity(new Intent(SignInActivity.this, NewTaskActivity.class));
         finish();
     }
 
