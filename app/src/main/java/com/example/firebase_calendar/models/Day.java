@@ -20,7 +20,7 @@ public class Day {
     }
 
     public void add(Event e) {
-        Event temp;
+        /*Event temp;
         for (int i = 0; i < events.size(); i++) {
             if (e.getStartTime() < events.get(i).getStartTime()) {
                 temp = e;
@@ -36,10 +36,16 @@ public class Day {
             eventMap.put("duration", String.valueOf(events.get(i).getDuration()));
             eventMap.put("time", String.valueOf(events.get(i).getDuration()));
             mDatabase.child("users").child(user).child("events").push().setValue(eventMap);
-        }
+        }*/
+        Map<String, Object> eventMap;
+        eventMap = new HashMap<String, Object>();
+        eventMap.put("title", e.getTitle());
+        eventMap.put("duration", String.valueOf(e.getDuration()));
+        eventMap.put("time", String.valueOf(e.getStartTime()));
+        mDatabase.child("users").child(user).child("events").push().setValue(eventMap);
     }
 
-    public ArrayList<Event> gaps() {
+    /*public ArrayList<Event> gaps() {
         ArrayList<Event> g = new ArrayList<>();
         for (int i = 0; i < events.size()-1; i++) {
             g.add(new Event("gap",
@@ -47,5 +53,5 @@ public class Day {
                     events.get(i).getStartTime()));
         }
         return g;
-    }
+    }*/
 }

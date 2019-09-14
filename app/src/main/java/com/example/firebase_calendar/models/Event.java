@@ -5,18 +5,40 @@ public class Event {
     private int duration;
     private int startTime;
 
-    public Event(String title, int duration) {
+    public Event(String title, String duration) {
         this.title = title;
-        this.duration = duration;
+        duration = duration.trim();
+        if (duration.contains("min") || duration.contains("minutes")) {
+            this.duration = Integer.valueOf(duration.split(" ")[0]);
+        } else if (duration.contains("hour") || duration.contains("hr")) {
+            this.duration = 60*Integer.valueOf(duration.split(" ")[0]);
+        } else {
+            try {
+                this.duration = Integer.valueOf(duration);
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        }
     }
 
-    public Event(String title, int duration, int startTime) {
+    public Event(String title, String duration, String startTime) {
         this(title, duration);
-        this.startTime = startTime;
+        startTime = startTime.trim();
+        try {
+            String t[] = startTime.split(":");
+            this.startTime = Integer.valueOf(t[0])*60 + Integer.valueOf(t[1]);
+        } catch (Exception e) {
+            System.err.println(e);
+        }
     }
 
-    public void setStartTime(int time) {
-        this.startTime = time;
+    public void setStartTime(String time) {
+        try {
+            String t[] = time.split(":");
+            this.startTime = Integer.valueOf(t[0])*60 + Integer.valueOf(t[1]);
+        } catch (Exception e) {
+            System.err.println(e);
+        }
     }
 
     public String getTitle() {

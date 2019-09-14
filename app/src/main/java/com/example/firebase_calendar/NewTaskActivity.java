@@ -6,9 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.firebase_calendar.models.Day;
+import com.example.firebase_calendar.models.Event;
 import com.example.firebase_calendar.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -28,22 +31,26 @@ public class NewTaskActivity extends AppCompatActivity {
 
     private EditText mTaskField;
     private EditText mDurationField;
-    private FloatingActionButton mSubmitButton;
+    private EditText mStartField;
+    private Button mSubmitButton;
+
+    private Day day;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main); //fix layout
+        setContentView(R.layout.activity_new_task);
 
         // [START initialize_database_ref]
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // [END initialize_database_ref]
 
-        /* fix fields
-        mTaskField = findViewById(R.id.fieldTaskName);
+        mTaskField = findViewById(R.id.fieldTask);
         mDurationField = findViewById(R.id.fieldDuration);
-        mSubmitButton = findViewById(R.id.fabSubmitTask);
-         */
+        mStartField = findViewById(R.id.startTime);
+        mSubmitButton = findViewById(R.id.addTask);
+
+        day = new Day();
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +63,7 @@ public class NewTaskActivity extends AppCompatActivity {
     private void submitTask() {
         final String task = mTaskField.getText().toString();
         final String duration = mDurationField.getText().toString();
+        final String start = mStartField.getText().toString();
 
         // Title is required
         if (TextUtils.isEmpty(task)) {
@@ -69,14 +77,22 @@ public class NewTaskActivity extends AppCompatActivity {
             return;
         }
 
+        if (TextUtils.isEmpty(start)) {
+            mStartField.setError(REQUIRED);
+            return;
+        }
+
         // Disable button so there are no multi-posts
-        setEditingEnabled(false);
+        //setEditingEnabled(false);
         Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show();
 
         // [START single_value_read]
 
         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(
+
+        day.add(new Event(task, duration, start));
+
+        /*mDatabase.child("users").child(userId).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -96,7 +112,7 @@ public class NewTaskActivity extends AppCompatActivity {
                         }
 
                         // Finish this Activity, back to the stream
-                        setEditingEnabled(true);
+                        //setEditingEnabled(true);
                         finish();
                         // [END_EXCLUDE]
                     }
@@ -105,13 +121,14 @@ public class NewTaskActivity extends AppCompatActivity {
                     public void onCancelled(DatabaseError databaseError) {
                         Log.w(TAG, "getUser:onCancelled", databaseError.toException());
                         // [START_EXCLUDE]
-                        setEditingEnabled(true);
+                        //setEditingEnabled(true);
                         // [END_EXCLUDE]
                     }
-                });
+                });*/
         // [END single_value_read]
     }
-    private void setEditingEnabled(boolean enabled) {
+
+    /*private void setEditingEnabled(boolean enabled) {
         mTaskField.setEnabled(enabled);
         mDurationField.setEnabled(enabled);
         if (enabled) {
@@ -119,7 +136,8 @@ public class NewTaskActivity extends AppCompatActivity {
         } else {
             mSubmitButton.hide();
         }
-    }
+    }*/
+
     private void writeNewTask(String userId, String task, String duration) {
         // Create new post at /user-tasks/$userid/$taskid and at
         // /tasks/$taskid simultaneously
