@@ -19,6 +19,13 @@ import android.widget.Toast;
 
 import com.example.firebase_calendar.db.TaskContract;
 import com.example.firebase_calendar.db.TaskDbHelper;
+import com.example.firebase_calendar.models.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class TodoActivity extends AppCompatActivity {
@@ -27,10 +34,19 @@ public class TodoActivity extends AppCompatActivity {
     private ListView mTaskListView;
     private ArrayAdapter mAdapter;
 
+    // [START declare_database_ref]
+    private DatabaseReference mDatabase;
+    // [END declare_database_ref]
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.todo_list);
+
+        // [START initialize_database_ref]
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        // [END initialize_database_ref]
+
         mHelper = new TaskDbHelper(this);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
         updateUI();
@@ -94,15 +110,35 @@ public class TodoActivity extends AppCompatActivity {
         updateUI();
     }
     private void updateUI() {
-        ArrayList<String> taskList = new ArrayList<>();
-        SQLiteDatabase db = mHelper.getReadableDatabase();
-        Cursor cursor = db.query(TaskContract.TaskEntry.TABLE,
-                new String[]{TaskContract.TaskEntry._ID, TaskContract.TaskEntry.COL_TASK_TITLE},
-                null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            int idx = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_TITLE);
-            taskList.add(cursor.getString(idx));
-        }
+        final ArrayList<String> taskList = new ArrayList<>();
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                taskList.clear();
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    Task task = postSnapshot.getValue(Task.class);
+                    taskList.add(task.getTask());
+
+                    // here you can access to name property like task.name
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getMessage());
+            }
+        });
+       // SQLiteDatabase db = mHelper.getReadableDatabase();
+        //Cursor cursor = db.query(TaskContract.TaskEntry.TABLE,
+       //         new String[]{TaskContract.TaskEntry._ID, TaskContract.TaskEntry.COL_TASK_TITLE},
+       //         null, null, null, null, null);
+       // while (cursor.moveToNext()) {
+        //    int idx = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_TITLE);
+//            taskList.add(cursor.getString(idx));
+        //}
+
+
 
         if (mAdapter == null) {
             mAdapter = new ArrayAdapter<>(this,
@@ -116,8 +152,8 @@ public class TodoActivity extends AppCompatActivity {
             mAdapter.notifyDataSetChanged();
         }
 
-        cursor.close();
-        db.close();
+//        cursor.close();
+//        db.close();
     }
 
     public void openDialog(){

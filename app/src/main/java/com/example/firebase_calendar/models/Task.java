@@ -14,4 +14,8 @@ public class Task {
         this.duration = duration;
     }
 
+    public String getTask(){
+        return taskName;
+    }
+
 }
