@@ -9,10 +9,12 @@
     <EditText
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"></EditText>
+        android:layout_gravity="center"
+        android:id="@+id/friend"></EditText>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="add friend"></Button>
+        android:text="add friend"
+        android:id="@+id/add_friend"></Button>
 </LinearLayout>
