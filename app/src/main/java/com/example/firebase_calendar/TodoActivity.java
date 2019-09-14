@@ -1,21 +1,15 @@
 package com.example.firebase_calendar;
 
-import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.firebase_calendar.db.TaskContract;
 import com.example.firebase_calendar.db.TaskDbHelper;
@@ -58,16 +52,6 @@ public class TodoActivity extends AppCompatActivity {
 //                                String task = String.valueOf(taskEditText.getText());
 //                                SQLiteDatabase db = mHelper.getWritableDatabase();
 //                                ContentValues values = new ContentValues();
-//                                final AlertDialog alert;
-//                                AlertDialog.Builder dialog2 = new AlertDialog.Builder(TodoActivity.this);
-//                                alert = dialog2.create();
-//                                alert.setTitle("How long will it take?");
-//                                alert.setButton("Yes", new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        // TODO Auto-generated method stub
-//                                        Toast.makeText(CategoryPage.this, "YESS", Toast.LENGTH_LONG).show();
-//                                    }
-//                                });
 //                                values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
 //                                db.insertWithOnConflict(TaskContract.TaskEntry.TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
 //                                db.close();
