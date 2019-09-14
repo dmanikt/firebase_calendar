@@ -1,10 +1,13 @@
 package com.example.firebase_calendar;
 
+import android.content.Intent;
 import android.drm.DrmStore;
 import android.graphics.RectF;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -31,12 +34,13 @@ import java.util.Objects;
 
 import hirondelle.date4j.DateTime;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
 //    MaterialCalendarView materialCalendarView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
+    NavigationView navigationView;
     AwesomeCalendarView awesomeCalendarView;
     String[] timeArray = {"12:00am", "", "", "", "1:00am", "", "", "", "2:00am", "", "", "", "3:00am", "", "", "",
                         "4:00am", "", "", "", "5:00am", "", "", "", "6:00am", "", "", "", "7:00am", "", "", "",
@@ -101,6 +105,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        navigationView = (NavigationView) findViewById(R.id.nav_menu);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
 
 //        WeekView mWeekView;
 //        WeekView.EventClickListener mEventClickListener;
@@ -125,5 +133,22 @@ public class MainActivity extends AppCompatActivity {
 //// month every time the month changes on the week view.
 //        mWeekView.setMonthChangeListener(mMonthChangeListener);
 //
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int id = menuItem.getItemId();
+
+        if(id == R.id.nav_calendar){
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            startActivity(intent);
+        }else if(id == R.id.nav_todo){
+            Intent intent = new Intent(MainActivity.this, TodoActivity.class);
+            startActivity(intent);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
