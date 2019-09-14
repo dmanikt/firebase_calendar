@@ -1,6 +1,7 @@
 package com.example.firebase_calendar;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -8,14 +9,20 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class AddFriendActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private Button mButton;
     private EditText mText;
     private String user;
+    private String friend;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,15 +37,29 @@ public class AddFriendActivity extends AppCompatActivity {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (view == mButton) addFriend(mText.getText().toString());
+                friend = mText.getText().toString();
+                if (view == mButton) addFriend(friend);
                 display();
             }
         });
     }
 
     public void display() {
-        String task = mDatabase.child("users").orderByChild("id").equalTo(mText.getText().toString()).getRef().child("events").toString();
-        Toast.makeText(this, task, Toast.LENGTH_SHORT).show();
+        final ArrayList<String> task = new ArrayList<>();
+        mDatabase.child("users").orderByChild("id").equalTo(friend).getRef().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot datas: dataSnapshot.getChildren()) {
+                    task.add(datas.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        Toast.makeText(this, String.valueOf(task.size()), Toast.LENGTH_SHORT).show();
     }
 
     public void addFriend(String name) {
