@@ -27,6 +27,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class TodoActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String TAG = "TodoActivity";
@@ -79,27 +83,6 @@ public class TodoActivity extends AppCompatActivity implements NavigationView.On
         }
         switch(item.getItemId()){
             case R.id.action_add_task: {
-//                final EditText taskEditText = new EditText(this);
-//                final EditText timeEditText = new EditText(this);
-//                AlertDialog dialog = new AlertDialog.Builder(TodoActivity.this)
-//                        .setTitle("Add a new task")
-//                        .setMessage("What do you want to do next?")
-//                        .setView(taskEditText)
-//                        .setPositiveButton("Next", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                String task = String.valueOf(taskEditText.getText());
-//                                SQLiteDatabase db = mHelper.getWritableDatabase();
-//                                ContentValues values = new ContentValues();
-//                                values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
-//                                db.insertWithOnConflict(TaskContract.TaskEntry.TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-//                                db.close();
-//                                updateUI();
-//                            }
-//                        })
-//                        .setNegativeButton("Cancel", null)
-//                        .create();
-//                dialog.show();
                 openDialog();
                 return true;
             }
@@ -136,16 +119,6 @@ public class TodoActivity extends AppCompatActivity implements NavigationView.On
                 System.out.println("The read failed: " + databaseError.getMessage());
             }
         });
-       // SQLiteDatabase db = mHelper.getReadableDatabase();
-        //Cursor cursor = db.query(TaskContract.TaskEntry.TABLE,
-       //         new String[]{TaskContract.TaskEntry._ID, TaskContract.TaskEntry.COL_TASK_TITLE},
-       //         null, null, null, null, null);
-       // while (cursor.moveToNext()) {
-        //    int idx = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_TITLE);
-//            taskList.add(cursor.getString(idx));
-        //}
-
-
 
         if (mAdapter == null) {
             mAdapter = new ArrayAdapter<>(this,
@@ -158,9 +131,6 @@ public class TodoActivity extends AppCompatActivity implements NavigationView.On
             mAdapter.addAll(taskList);
             mAdapter.notifyDataSetChanged();
         }
-
-//        cursor.close();
-//        db.close();
     }
 
     public void openDialog(){
@@ -184,5 +154,54 @@ public class TodoActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    // events = [ [start1, duration1], [start2, duration2], ... ]
+    public int[][] suggestMeetingTimes(int[][] events){
+        ArrayList<int[]> intervals = new ArrayList<>();
+        int intervalStart = -1;
+        for(int time = 0; time <= 2400; time += 15) {
+            // check if everybody is free
+            boolean allFree = true;
+            for(int[] busyPeriod : events) {
+                if(busyPeriod[0] < time && (busyPeriod[0] + busyPeriod[1]) > time) {
+                    allFree = false;
+                    break;
+                }
+            }
+
+            if(allFree && intervalStart < 0) {
+                intervalStart = time;
+            } else if(!allFree && intervalStart >= 0) {
+                intervals.add(new int[] { intervalStart, time - 15 });
+                intervalStart = -1;
+            }
+        }
+
+        return (int[][]) intervals.toArray();
+    }
+
+    public int[][] getFreeTime(int[][] events){
+        ArrayList<int[]> intervals = new ArrayList<>();
+        int intervalStart = -1;
+        for(int time = 0; time <= 2400; time += 15) {
+            // check if everybody is free
+            boolean free = true;
+            for(int[] busyPeriod : events) {
+                if(busyPeriod[0] < time && (busyPeriod[0] + busyPeriod[1]) > time) {
+                    free = false;
+                    break;
+                }
+            }
+
+            if(free && intervalStart < 0) {
+                intervalStart = time;
+            } else if(!free && intervalStart >= 0) {
+                intervals.add(new int[] { intervalStart, time - 15 });
+                intervalStart = -1;
+            }
+        }
+
+        return (int[][]) intervals.toArray();
     }
 }

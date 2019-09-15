@@ -61,13 +61,6 @@ public class SignInActivity extends AppCompatActivity {
                 if (view == mSignUpButton) signUp();
             }
         });
-
-        /*List<AuthUI.IdpConfig> providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build());
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers).build(),
-                123);*/
     }
 
     public void onStart() {
