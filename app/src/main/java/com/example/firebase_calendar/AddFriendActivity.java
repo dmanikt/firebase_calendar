@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.firebase_calendar.models.Event;
 import com.example.firebase_calendar.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -52,8 +53,11 @@ public class AddFriendActivity extends AppCompatActivity {
                 new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                toast(user);
+                User user = dataSnapshot.getChildren().iterator().next().getValue(User.class);
+                Event event = dataSnapshot.getChildren().iterator().next().child("events").getChildren().iterator().next().getValue(Event.class);
+                System.out.println(dataSnapshot);
+                System.out.println(user);
+                toast(event);
             }
 
             @Override
@@ -63,8 +67,8 @@ public class AddFriendActivity extends AppCompatActivity {
         });
     }
 
-    public void toast(User user) {
-        Toast.makeText(this, user.id, Toast.LENGTH_SHORT).show();
+    public void toast(Event event) {
+        Toast.makeText(this, event.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     public void addFriend(String name) {
