@@ -9,13 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class TodoAdapter extends ArrayAdapter {
 
     private final Activity context;
-    private final String[] timeArray;
-    private final String[] eventArray;
+    private final ArrayList<String> timeArray;
+    private final ArrayList<String> eventArray;
 
-    public TodoAdapter(Activity context, String[] timeArray, String[] eventArray) {
+    public TodoAdapter(Activity context, int resource, ArrayList timeArray, ArrayList eventArray) {
         super(context, R.layout.item_todo, eventArray);
         this.context = context;
         this.timeArray = timeArray;
@@ -32,8 +34,8 @@ public class TodoAdapter extends ArrayAdapter {
         TextView eventField = (TextView) rowView.findViewById(R.id.task_title);
 
         //this code sets the values of the objects to values from the arrays
-        timeField.setText(timeArray[position]);
-        eventField.setText(eventArray[position]);
+        timeField.setText(timeArray.get(position));
+        eventField.setText(eventArray.get(position));
 
         return rowView;
 

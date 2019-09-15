@@ -40,8 +40,8 @@ public class TodoActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
-    private String[] timeArray = new String[100];
-    private String[] eventArray = new String[100];
+    private ArrayList<String> timeArray = new ArrayList<>();
+    private ArrayList<String> eventArray = new ArrayList<>();
 
     // [START declare_database_ref]
     private DatabaseReference mDatabase;
@@ -50,8 +50,10 @@ public class TodoActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        timeArray[0] = "30";
-        eventArray[0] = "Sleep";
+        timeArray.add("30");
+        timeArray.add("10");
+        eventArray.add("Sleep");
+        eventArray.add("Code");
 
         setContentView(R.layout.todo_list);
 
@@ -59,8 +61,8 @@ public class TodoActivity extends AppCompatActivity implements NavigationView.On
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // [END initialize_database_ref]
 
-        mHelper = new TaskDbHelper(this);
-        TodoAdapter todoAdapter = new TodoAdapter(this, timeArray, eventArray);
+//        mHelper = new TaskDbHelper(this);
+        TodoAdapter todoAdapter = new TodoAdapter(this, R.id.list_todo, timeArray, eventArray);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
         mTaskListView.setAdapter(todoAdapter);
 //        updateUI();
@@ -100,10 +102,13 @@ public class TodoActivity extends AppCompatActivity implements NavigationView.On
     public void deleteTask(View v){
         View parent = (View) v.getParent();
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
-        String task = String.valueOf(taskTextView.getText());
-        SQLiteDatabase db = mHelper.getWritableDatabase();
-        db.delete(TaskContract.TaskEntry.TABLE, TaskContract.TaskEntry.COL_TASK_TITLE + " =?", new String[]{task});
-        db.close();
+        eventArray.remove(taskTextView);
+        TextView timeTextView = (TextView) parent.findViewById(R.id.task_time);
+        timeArray.remove(timeTextView);
+//        String task = String.valueOf(taskTextView.getText());
+//        SQLiteDatabase db = mHelper.getWritableDatabase();
+//        db.delete(TaskContract.TaskEntry.TABLE, TaskContract.TaskEntry.COL_TASK_TITLE + " =?", new String[]{task});
+////        db.close();
         updateUI();
     }
     private void updateUI() {
