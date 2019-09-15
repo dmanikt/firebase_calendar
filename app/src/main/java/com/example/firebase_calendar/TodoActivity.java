@@ -1,21 +1,21 @@
 package com.example.firebase_calendar;
 
-import android.content.ContentValues;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AlertDialog;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.firebase_calendar.db.TaskContract;
 import com.example.firebase_calendar.db.TaskDbHelper;
@@ -28,11 +28,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class TodoActivity extends AppCompatActivity {
+public class TodoActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String TAG = "TodoActivity";
     private TaskDbHelper mHelper;
     private ListView mTaskListView;
     private ArrayAdapter mAdapter;
+    private DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    private ActionBarDrawerToggle toggle;
 
     // [START declare_database_ref]
     private DatabaseReference mDatabase;
@@ -50,6 +53,17 @@ public class TodoActivity extends AppCompatActivity {
         mHelper = new TaskDbHelper(this);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
         updateUI();
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        navigationView = (NavigationView) findViewById(R.id.nav_menu);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -60,6 +74,9 @@ public class TodoActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(toggle.onOptionsItemSelected(item)){
+            return true;
+        }
         switch(item.getItemId()){
             case R.id.action_add_task: {
 //                final EditText taskEditText = new EditText(this);
@@ -74,16 +91,6 @@ public class TodoActivity extends AppCompatActivity {
 //                                String task = String.valueOf(taskEditText.getText());
 //                                SQLiteDatabase db = mHelper.getWritableDatabase();
 //                                ContentValues values = new ContentValues();
-//                                final AlertDialog alert;
-//                                AlertDialog.Builder dialog2 = new AlertDialog.Builder(TodoActivity.this);
-//                                alert = dialog2.create();
-//                                alert.setTitle("How long will it take?");
-//                                alert.setButton("Yes", new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        // TODO Auto-generated method stub
-//                                        Toast.makeText(CategoryPage.this, "YESS", Toast.LENGTH_LONG).show();
-//                                    }
-//                                });
 //                                values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
 //                                db.insertWithOnConflict(TaskContract.TaskEntry.TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
 //                                db.close();
@@ -162,4 +169,20 @@ public class TodoActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int id = menuItem.getItemId();
+
+        if(id == R.id.nav_calendar){
+            Intent intent = new Intent(TodoActivity.this, MainActivity.class);
+            startActivity(intent);
+        }else if(id == R.id.nav_todo){
+            Intent intent = new Intent(TodoActivity.this, TodoActivity.class);
+            startActivity(intent);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }

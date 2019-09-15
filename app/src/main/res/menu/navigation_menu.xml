@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:id="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/nav_calendar"
+        android:icon="@drawable/calendar"
+        android:title="Calendar"/>
+
+    <item android:id="@+id/nav_todo"
+        android:icon="@drawable/note"
+        android:title="Todo"/>
+
+</menu>
