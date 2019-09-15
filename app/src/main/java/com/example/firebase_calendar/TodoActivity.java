@@ -40,6 +40,8 @@ public class TodoActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
+    private String[] timeArray = new String[100];
+    private String[] eventArray = new String[100];
 
     // [START declare_database_ref]
     private DatabaseReference mDatabase;
@@ -48,6 +50,9 @@ public class TodoActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        timeArray[0] = "30";
+        eventArray[0] = "Sleep";
+
         setContentView(R.layout.todo_list);
 
         // [START initialize_database_ref]
@@ -55,8 +60,10 @@ public class TodoActivity extends AppCompatActivity implements NavigationView.On
         // [END initialize_database_ref]
 
         mHelper = new TaskDbHelper(this);
+        TodoAdapter todoAdapter = new TodoAdapter(this, timeArray, eventArray);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
-        updateUI();
+        mTaskListView.setAdapter(todoAdapter);
+//        updateUI();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
@@ -131,7 +138,34 @@ public class TodoActivity extends AppCompatActivity implements NavigationView.On
             mAdapter.addAll(taskList);
             mAdapter.notifyDataSetChanged();
         }
+//        updateUI();
     }
+//    private void updateUI() {
+//        ArrayList<String> taskList = new ArrayList<>();
+//        SQLiteDatabase db = mHelper.getReadableDatabase();
+//        Cursor cursor = db.query(TaskContract.TaskEntry.TABLE,
+//                new String[]{TaskContract.TaskEntry._ID, TaskContract.TaskEntry.COL_TASK_TITLE},
+//                null, null, null, null, null);
+//        while (cursor.moveToNext()) {
+//            int idx = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_TITLE);
+//            taskList.add(cursor.getString(idx));
+//        }
+//
+//        if (mAdapter == null) {
+//            mAdapter = new ArrayAdapter<>(this,
+//                    R.layout.item_todo,
+//                    R.id.task_title,
+//                    taskList);
+//            mTaskListView.setAdapter(mAdapter);
+//        } else {
+//            mAdapter.clear();
+//            mAdapter.addAll(taskList);
+//            mAdapter.notifyDataSetChanged();
+//        }
+//
+//        cursor.close();
+//        db.close();
+//    }
 
     public void openDialog(){
         ExampleDialog exampleDialog = new ExampleDialog();

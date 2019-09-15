@@ -41,7 +41,7 @@
         android:layout_height="match_parent">
         <com.github.naz013.awcalendar.AwesomeCalendarView
             android:id="@+id/calendar_view"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:ac_day_bg_color="@color/colorPrimary"
             app:ac_day_border_color="#ffffff"
