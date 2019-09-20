@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/prompt_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text = "What do you want to do next?"/>
+
+    <EditText
+        android:id="@+id/task_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Task Name"/>
+
+    <TextView
+        android:id="@+id/prompt_time"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="How long will it take?"/>
+
+    <EditText
+        android:id="@+id/time_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Time"/>
+
+
+
+</LinearLayout>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "920456847792",
+    "firebase_url": "https://hophacks2019-41bb3.firebaseio.com",
+    "project_id": "hophacks2019-41bb3",
+    "storage_bucket": "hophacks2019-41bb3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920456847792:android:ead74d6424b4509034f675",
+        "android_client_info": {
+          "package_name": "com.example.firebase_calendar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "920456847792-b2jmh8m5eqlrp04ot2dhuridqrhh2iv7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuamFrCxGMrgyLaklqoAngD0RUucmAhOo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "920456847792-b2jmh8m5eqlrp04ot2dhuridqrhh2iv7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
