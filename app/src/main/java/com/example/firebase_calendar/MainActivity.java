@@ -28,6 +28,7 @@ import android.widget.ListView;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
+import com.example.firebase_calendar.models.Event;
 import com.github.naz013.awcalendar.AwesomeCalendarView;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -44,6 +45,7 @@ import hirondelle.date4j.DateTime;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
+    private DatabaseManager dm = new DatabaseManager();
 //    MaterialCalendarView materialCalendarView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -63,12 +65,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event",
                             "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event",
                             "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event",};
+    String[] eventArray2 = {"Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event",
+            "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event",
+            "Event", "RUNNING", "", "", "", "", "", "", "", "", "Event", "Event",
+            "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event",
+            "Event", "LUNCH", "", "", "", "Event", "Event", "Event", "Event", "Event", "Event", "Event",
+            "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event",
+            "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event",
+            "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event", "Event",};
     ListView listView;
+    public static ArrayList<Event> staticEvents = new ArrayList<>();
+    public static boolean s = false;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void adjustSchedule(String name) {
+        ArrayList<Event> events = staticEvents;
+        System.out.println("???? size " + events.size());
+        for (Event e: events) {
+            System.out.println(e.getTitle());
+            for (int i = 0; i < Integer.valueOf(e.getDuration())/15; i++) {
+                eventArray[(Integer.valueOf(e.getStartTime())+i)/15] = e.getTitle();
+            }
+        }
     }
 
     @Override
@@ -88,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String task = String.valueOf(taskEditText.getText());
+                            dm.addFriend(task);
+                            dm.getEvents(task);
+                            adjustSchedule(task);
                             Log.v(TAG, "Do database stuff");
                         }
                     })
@@ -122,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CalendarAdapter calendarAdapter = new CalendarAdapter(this, timeArray, eventArray);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(this, timeArray, eventArray, eventArray2);
         listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(calendarAdapter);
 

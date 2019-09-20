@@ -60,9 +60,20 @@ public class DatabaseManager {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        System.out.println(dataSnapshot);
                         Iterator<DataSnapshot> i = dataSnapshot.getChildren().iterator().next().child("events").getChildren().iterator();
                         while (i.hasNext()) {
-                            e.add(i.next().getValue(Event.class));
+                            Event elt = i.next().getValue(Event.class);
+                            e.add(elt);
+                            System.out.println("////" + elt.getTitle());
+                            MainActivity.staticEvents.add(elt);
+                        }
+                        System.out.println("size /// " + e.size());
+                        MainActivity.s = true;
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
                         }
                     }
 
